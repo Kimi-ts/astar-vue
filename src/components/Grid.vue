@@ -39,7 +39,8 @@ export default {
   data: function() {
       return {
                 localStart: "2",
-                localFinish: "6"
+                localFinish: "6",
+                grid: this.$store.state.grid
       }
   },
   computed: {
@@ -48,9 +49,6 @@ export default {
       },
       finish: function(){
           return this.$store.state.finish;
-      },
-      grid: function(){
-          return this.$store.state.grid
       }
   },
   methods:{
@@ -86,6 +84,6 @@ export default {
         }
     }
     .weight{
-     vertical-align: top;   
+        vertical-align: top;   
     }
 </style>
