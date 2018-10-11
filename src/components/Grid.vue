@@ -3,7 +3,7 @@
         <div class="parent">
             <div v-for="(value,item) in grid" :key="item.key" class="child">
                 <div class="">
-                    <span class="value" v-bind:class="{start : item == start, finish: item == finish }">
+                    <span class="value" v-bind:class="{start : item == localStart, finish: item == localFinish }">
                         {{item}}
                     </span>
                     <span class="weight">{{value.weight}}</span>
@@ -38,17 +38,9 @@ export default {
   name: 'Grid',
   data: function() {
       return {
-                localStart: "2",
-                localFinish: "6",
-                grid: this.$store.state.grid
-      }
-  },
-  computed: {
-      start: function(){
-          return this.$store.state.start;
-      },
-      finish: function(){
-          return this.$store.state.finish;
+                localStart: "0",
+                localFinish: "0",
+                grid: this.$store.state.grid,
       }
   },
   methods:{
