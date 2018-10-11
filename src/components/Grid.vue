@@ -2,7 +2,7 @@
     <div class="grid">
         <div class="parent">
             <div v-for="(value,item) in grid" :key="item.key" class="child">
-                <div class="">
+                <div class="item" v-bind:class="{busy: value.isBusy}">
                     <span class="value" v-bind:class="{start : item == localStart, finish: item == localFinish }">
                         {{item}}
                     </span>
@@ -26,6 +26,11 @@
             <input type="text" v-model="localFinish">
         </div>
         <div>
+            enter wall: 
+            <input type="text" v-model="localWall">
+            <button @click = "addWall">Add wall</button>
+        </div>
+        <div>
             <button @click ="run">Run</button>
         </div>
         </div>
@@ -40,6 +45,7 @@ export default {
       return {
                 localStart: "0",
                 localFinish: "0",
+                localWall: "0",
                 grid: this.$store.state.grid,
       }
   },
@@ -52,6 +58,9 @@ export default {
       },
       reset: function(){
           this.$store.commit("initGrid");
+      },
+      addWall: function(){
+          this.$store.commit("setBusyItem", this.localWall);
       }
   }
 }
@@ -64,6 +73,12 @@ export default {
     }
     .child{
 
+    }
+
+    .item{
+        &.busy{
+            border: 1px solid red;
+        }
     }
     .value{
         font-size: 200%;
