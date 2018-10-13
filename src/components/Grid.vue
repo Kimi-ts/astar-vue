@@ -58,6 +58,8 @@ export default {
       },
       reset: function(){
           this.$store.commit("initGrid");
+          this.localStart = "0";
+          this.localFinish = "0";
       },
       addWall: function(){
           this.$store.commit("setBusyItem", this.localWall);
