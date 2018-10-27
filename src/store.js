@@ -87,6 +87,23 @@ export default new Vuex.Store({
           grid[key].neibs.splice(removeIndex, 1);
         }
       }
+    },
+    removeBusyItem(state, item){
+      var grid = this.state.grid;
+      var initialGrid = getGridData();
+      if (!grid[item] || !grid[item].isBusy){
+        return;
+      }
+
+      grid[item].isBusy = false;
+      
+      for(var key in initialGrid){
+        var addIndex = initialGrid[key].neibs.indexOf(item);
+
+        if (addIndex != -1){
+          grid[key].neibs.push(item);
+        }
+      }
     }
   },
   actions: {

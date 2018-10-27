@@ -31,6 +31,11 @@
             <button @click = "addWall">Add wall</button>
         </div>
         <div>
+            remove wall:
+            <input type="text" v-model="removeLocalWall">
+            <button @click = "removeWall">Remove wall</button>
+        </div>
+        <div>
             <button @click ="run">Run</button>
         </div>
         </div>
@@ -46,6 +51,7 @@ export default {
                 localStart: "0",
                 localFinish: "0",
                 localWall: "0",
+                removeLocalWall: "0",
                 grid: this.$store.state.grid,
       }
   },
@@ -63,6 +69,9 @@ export default {
       },
       addWall: function(){
           this.$store.commit("setBusyItem", this.localWall);
+      },
+      removeWall: function(){
+          this.$store.commit("removeBusyItem", this.removeLocalWall);
       }
   }
 }
