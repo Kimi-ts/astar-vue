@@ -2,10 +2,10 @@
     <div class="grid">
         <div class="parent">
             <div v-for="(value,item) in grid" :key="item.key" class="child">
-                <div class="item" v-bind:class="{busy: value.isBusy}">
-                    <span class="value" v-bind:class="{start : item == localStart, finish: item == localFinish }">
+                <div class="item">
+                    <button class="value" v-bind:class="{start : item == localStart, finish: item == localFinish, busy: value.isBusy }" @click="setPoint(item)">
                         {{item}}
-                    </span>
+                    </button>
                     <span class="weight">{{value.weight}}</span>
                     <div>
                         {{value.neibs}}
@@ -61,6 +61,16 @@ export default {
           this.$store.commit("setStart", this.localStart);
           this.$store.commit("setFinish", this.localFinish);
           this.$store.commit("applyWeights");
+
+          if (this.grid[this.localFinish] && this.grid[this.localFinish].weight != 0){
+              this.$store.commit("setBusyItem", this.localFinish);
+              this.$store.commit("removeBusyItem", this.localStart);
+              this.localStart = "0";
+              this.localFinish = "0"
+          }
+          else{
+              this.localFinish = "0";
+          }
       },
       reset: function(){
           this.$store.commit("initGrid");
@@ -72,6 +82,23 @@ export default {
       },
       removeWall: function(){
           this.$store.commit("removeBusyItem", this.removeLocalWall);
+      },
+      setPoint(data){
+        if (this.grid[data].isBusy){
+            this.setStartItem(data);
+        }
+        else{
+            if (this.localStart != "0" && !this.grid[data].isBusy){
+                this.setFinishItem(data);
+                this.run();
+            }
+        }
+      },
+      setStartItem(data){
+          this.localStart = data;
+      },
+      setFinishItem(data){
+          this.localFinish = data;
       }
   }
 }
@@ -87,18 +114,18 @@ export default {
     }
 
     .item{
-        &.busy{
-            border: 1px solid red;
-        }
     }
     .value{
         font-size: 200%;
-
+        border-radius: 50%;
+        &.busy{
+            background-color: lightblue;
+        }
         &.start{
-            color: blue;
+            background-color: bisque;
         }
         &.finish{
-            color: pink;
+            background-color: yellow;
         }
     }
     .weight{
