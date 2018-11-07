@@ -71,17 +71,18 @@ export default new Vuex.Store({
     setFinish(state, finish) {
       state.finish = finish;
     },
-    setBusyItem(state, item){
+    setBusyItem(state, data){
       var grid = this.state.grid;
-      if (!grid[item]){
+      if (!grid[data.item]){
         return
       }
 
-      grid[item].isBusy = true
+      grid[data.item].isBusy = true;
+      grid[data.item].color = data.color;
       
-      //remove othem from other's items neibs list
+      //remove item from other's items neibs list
       for (var key in grid) {
-        var removeIndex = grid[key].neibs.indexOf(item);
+        var removeIndex = grid[key].neibs.indexOf(data.item);
 
         if (removeIndex != -1){
           grid[key].neibs.splice(removeIndex, 1);
@@ -96,6 +97,7 @@ export default new Vuex.Store({
       }
 
       grid[item].isBusy = false;
+      grid[item].color = null;
       
       for(var key in initialGrid){
         var addIndex = initialGrid[key].neibs.indexOf(item);

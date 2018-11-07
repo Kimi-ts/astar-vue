@@ -3,7 +3,7 @@
         <div class="parent">
             <div v-for="(value,item) in grid" :key="item.key" class="child">
                 <div class="item">
-                    <button class="value" v-bind:class="{start : item == localStart, finish: item == localFinish, busy: value.isBusy }" @click="setPoint(item)">
+                    <button class="value" v-bind:class="{start : item == localStart, finish: item == localFinish, busy: value.isBusy }" v-bind:style="{backgroundColor: value.color}" @click="setPoint(item)">
                         {{item}}
                     </button>
                     <span class="weight">{{value.weight}}</span>
@@ -44,6 +44,9 @@
 
 <script>
 
+import getRandomNumber from '../randomGenerator'
+import gridColours from '../gridColours'
+
 export default {
   name: 'Grid',
   data: function() {
@@ -53,6 +56,8 @@ export default {
                 localWall: "0",
                 removeLocalWall: "0",
                 grid: this.$store.state.grid,
+                newItems: 3,
+                colors: gridColours()
       }
   },
   methods:{
@@ -63,7 +68,11 @@ export default {
           this.$store.commit("applyWeights");
 
           if (this.grid[this.localFinish] && this.grid[this.localFinish].weight != 0){
-              this.$store.commit("setBusyItem", this.localFinish);
+              var payload = {
+                  item: this.localFinish,
+                  color: this.grid[this.localStart].color
+              }
+              this.$store.commit("setBusyItem", payload);
               this.$store.commit("removeBusyItem", this.localStart);
               this.localStart = "0";
               this.localFinish = "0"
@@ -78,7 +87,13 @@ export default {
           this.localFinish = "0";
       },
       addWall: function(){
-          this.$store.commit("setBusyItem", this.localWall);
+          var number = getRandomNumber(0, this.colors.length-1);
+          var color = this.colors[number].color;
+          var payload = {
+              item: this.localWall,
+              color: color
+          }
+          this.$store.commit("setBusyItem", payload );
       },
       removeWall: function(){
           this.$store.commit("removeBusyItem", this.removeLocalWall);
