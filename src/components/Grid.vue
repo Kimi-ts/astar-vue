@@ -8,33 +8,13 @@
             <div v-for="(value,item) in grid" :key="item.key" class="child">
                 <div class="item">
                     <button class="value" v-bind:style="{backgroundColor: value.color}" @click="setPoint(item)">
-                        {{item}}
+                        *
                     </button>
-                    <span class="weight">{{value.weight}}</span>
-                    <div>
-                        {{value.neibs}}
-                    </div>
                 </div>
             </div>
         </div>
         <div>
             <button @click="reset">Start new game</button>
-        </div>
-        <div>
-            enter start: 
-            <input type="text" v-model="localStart">
-        </div>
-        <div>
-            enter finish: 
-            <input type="text" v-model="localFinish">
-        </div>
-        <div>
-            remove wall:
-            <input type="text" v-model="removeLocalWall">
-            <button @click = "removeWall">Remove wall</button>
-        </div>
-        <div>
-            <button @click ="run">Run</button>
         </div>
     </div>
 </div>
@@ -52,7 +32,7 @@ export default {
       localFinish: "0",
       removeLocalWall: "0",
       grid: this.$store.state.grid,
-      newItems: 2,
+      newItems: 3,
       colors: gridColours(),
       points: 0
     };
@@ -157,9 +137,12 @@ export default {
 <style scoped lang="less">
 .parent {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  margin: 0 auto 20px;
+  width: 300px;
 }
 .child {
+    //max-width: 30px;
 }
 
 .item {
@@ -167,8 +150,5 @@ export default {
 .value {
   font-size: 200%;
   border-radius: 50%;
-}
-.weight {
-  vertical-align: top;
 }
 </style>
