@@ -1,4 +1,8 @@
 <template>
+<div class="game">
+    <div class="points">
+        <p>Your points: {{points}}</p>
+    </div>
     <div class="grid">
         <div class="parent">
             <div v-for="(value,item) in grid" :key="item.key" class="child">
@@ -33,6 +37,7 @@
             <button @click ="run">Run</button>
         </div>
     </div>
+</div>
 </template>
 
 <script>
@@ -48,7 +53,8 @@ export default {
       removeLocalWall: "0",
       grid: this.$store.state.grid,
       newItems: 2,
-      colors: gridColours()
+      colors: gridColours(),
+      points: 0
     };
   },
   methods: {
@@ -68,8 +74,16 @@ export default {
         this.localStart = "0";
         this.localFinish = "0";
         //to do: add logic for removing here
-        for(var i = 0; i < this.newItems; i++){
-            this.addWall();
+        if (this.tryClearSquares() == true){
+            this.points += 4;
+        }
+        else{
+            for(var i = 0; i < this.newItems; i++){
+                this.addWall();
+            }
+            if (this.tryClearSquares() == true){
+                this.points += 4;
+            }
         }
       } else {
         this.localFinish = "0";
@@ -100,8 +114,8 @@ export default {
           alert("game in over!");
       }
     },
-    removeWall: function() {
-      this.$store.commit("removeBusyItem", this.removeLocalWall);
+    removeWall: function(item) {
+      this.$store.commit("removeBusyItem", item);
     },
     setPoint(data) {
       if (this.grid[data].isBusy) {
@@ -111,6 +125,23 @@ export default {
           this.setFinishItem(data);
           this.run();
         }
+      }
+    },
+    tryClearSquares: function(){
+      for (var key in this.grid) {
+          if (this.grid[key].isBusy && this.grid[key].square){
+              var i = 0;
+              while(i < 3 && this.grid[key].color == this.grid[this.grid[key].square[i]].color){
+                  i++;
+              }
+              if (i == 3){
+                  this.removeWall(key);
+                  for(var c = 0; c < 3; c++){
+                      this.removeWall(this.grid[key].square[c])
+                  }
+                  return true;
+              }
+          }
       }
     },
     setStartItem(data) {
