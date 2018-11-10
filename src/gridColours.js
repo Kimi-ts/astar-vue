@@ -3,6 +3,6 @@ export default function gridColours(){
         {name: "red", color: "#f00"},
         {name: "green", color: "#0f0"},
         {name: "blue", color: "#00f"},
-        {name: "black", color: "#fff"}
+        {name: "orange", color: "#f1ef66"}
     ];
 }
